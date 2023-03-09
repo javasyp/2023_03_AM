@@ -1,6 +1,5 @@
 package com.KoreaIT.java.AM;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -63,13 +62,16 @@ public class Main {
 
 				System.out.print("제목 : ");
 				String title = sc.nextLine();
-
+				
 				System.out.print("내용 : ");
 				String content = sc.nextLine();
+				
+				// 작성 날짜 저장
+				String regdate = Util.getNowDateTimeStr();
 
 //				Article article = new Article(id, title, content);
 //				articles_list.add(article);				
-				articles_list.add(new Article(id, title, content));
+				articles_list.add(new Article(id, regdate, title, content));
 
 				System.out.println(id + "번 글이 생성되었습니다.");
 				lastId++;
@@ -91,11 +93,12 @@ public class Main {
 					continue;
 				}
 				
-				int num = Integer.parseInt(cmdDiv[2]); 	// String -> Int 형 변환
+				// 문자열을 정수형으로 형 변환
+				int num = Integer.parseInt(cmdDiv[2]);
 				
 				Article foundArticle = null;
 				
-				// 게시물 있는 경우
+				// 게시물 있는지 판별 (배열 순회하여 비교)
 				for (int i = 0; i < articles_list.size(); i++) {
 					Article articles_detail = articles_list.get(i);
 					
@@ -105,15 +108,16 @@ public class Main {
 					}
 				}
 				
-				if (foundArticle == null) {
+				if (foundArticle == null) {	// 게시물 없는 경우
 					System.out.println(num + "번 게시물은 존재하지 않습니다.");
 					continue;
-				} else {
-					System.out.println("번호 : " + foundArticle.ID);
-					System.out.println("날짜 : " + LocalDate.now());
-					System.out.println("제목 : " + foundArticle.Title);
-					System.out.println("내용 : " + foundArticle.Content);
 				}
+				
+				System.out.println("번호 : " + foundArticle.ID);
+				System.out.println("날짜 : " + foundArticle.RegDate);
+				System.out.println("제목 : " + foundArticle.Title);
+				System.out.println("내용 : " + foundArticle.Content);
+				
 			}
 			
 			else {
@@ -129,11 +133,13 @@ public class Main {
 
 class Article {
 	int ID;
+	String RegDate;
 	String Title;
 	String Content;
 
-	Article(int id, String title, String content) {
+	Article(int id, String regdate, String title, String content) {
 		this.ID = id;
+		this.RegDate = regdate;
 		this.Title = title;
 		this.Content = content;
 	}
