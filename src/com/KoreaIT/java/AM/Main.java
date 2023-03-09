@@ -55,7 +55,7 @@ public class Main {
 				}
 			}
 			
-			// 2. 게시물 작성하기
+			// 2. 게시글 입력하기
 			// 제목과 내용을 배열 리스트에 저장
 			else if (command.equals("article write")) {
 				int id = lastId + 1;
@@ -88,6 +88,7 @@ public class Main {
 				// cmdDiv[1] : delete
 				// cmdDiv[2] : (숫자 부분)
 				
+				// 몇 번인지 확인이 안될 때
 				if (cmdDiv.length < 3) {
 					System.out.println("명령어를 확인해 주세요.");
 					continue;
@@ -96,6 +97,7 @@ public class Main {
 				// 문자열을 정수형으로 형 변환
 				int num = Integer.parseInt(cmdDiv[2]);
 				
+				// 비어있다고 가정
 				Article foundArticle = null;
 				
 				// 게시물 있는지 판별 (배열 순회하여 비교)
@@ -117,6 +119,47 @@ public class Main {
 				System.out.println("날짜 : " + foundArticle.RegDate);
 				System.out.println("제목 : " + foundArticle.Title);
 				System.out.println("내용 : " + foundArticle.Content);
+				
+			}
+			
+			
+			// 4. 게시글 삭제하기
+			// "article delete 번호" 입력 시 없으면 "n번 게시물이 존재하지 않습니다."
+			// 있으면 삭제 후 "n번 게시물이 삭제되었습니다." 출력
+			else if (command.startsWith("article delete")) {
+				String[] cmdDiv = command.split(" ");
+				
+				if (cmdDiv.length < 3) {
+					System.out.println("명령어를 확인해 주세요.");
+					continue;
+				}
+				
+				int num = Integer.parseInt(cmdDiv[2]);
+				
+				// 값을 삭제하면 삭제한 만큼 인덱스는 하나씩 줄게 된다.
+				// 그래서 내가 찾는 글의 번호와 실제 인덱스의 값이 일치하지 않는다.
+				// 삭제 후 저장할 때 인덱스는 난 자리부터 채워지기 때문에
+				// 반드시 변수를 따로 지정해준다.
+				int foundIndex = -1;
+				
+				// 게시물 있는지 판별 (배열 순회하여 비교)
+				for (int i = 0; i < articles_list.size(); i++) {
+					Article articles_delete = articles_list.get(i);
+					
+					if (articles_delete.ID == num) {
+						foundIndex = i;
+						break;
+					}
+				}
+				
+				if (foundIndex == -1) {	// 게시물 없는 경우
+					System.out.println(num + "번 게시물은 존재하지 않습니다.");
+					continue;
+				}
+				
+				articles_list.remove(foundIndex);//이렇게 작성하면 인덱스가 당겨지기 때문에 
+				
+				System.out.println(num + "번 글이 삭제되었습니다.");
 				
 			}
 			
