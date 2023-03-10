@@ -5,16 +5,26 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+	static List<Article> articles_board = new ArrayList<>();
+	// main과 makeTestData 메소드가 static이기 때문에 static 붙여준다.
+	
 	public static void main(String[] args) {
+		
 		System.out.println("=== 프로그램 시작 ===");
+		
+//		List<Article> articles_board = new ArrayList<>();
+		// 현재 지역변수인 articles_board를 전역변수로 빼기
+		
+		// 테스트할 데이터 미리 생성하기
+		makeTestData();
 
 		Scanner sc = new Scanner(System.in);
 		
 		// 게시물을 담을 배열 리스트 생성
 		// 주의 ※ 반복문 안에 넣으면 계속 초기화 됨!!!
-		List<Article> articles_board = new ArrayList<>();
-
-		int lastId = 0;
+		
+		// makeTestData() 호출하여 이미 3개가 들어와 있는 상태
+		int lastId = 3;
 		
 		int count = 0;
 
@@ -72,7 +82,7 @@ public class Main {
 
 //				Article article = new Article(id, title, content);
 //				articles_board.add(article);
-				articles_board.add(new Article(id, count, regDate, regDate, title, content));
+				articles_board.add(new Article(id, regDate, regDate, title, content, count));
 
 				System.out.println(id + "번 글이 생성되었습니다.");
 				lastId++;
@@ -225,6 +235,15 @@ public class Main {
 
 		sc.close();
 	}
+	
+	
+	// 단어 미리 입력하는 함수
+	public static void makeTestData() {
+		System.out.println("테스트를 위한 데이터를 생성합니다.");
+		articles_board.add(new Article(1, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목1", "내용1", 11));
+		articles_board.add(new Article(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목2", "내용2", 22));
+		articles_board.add(new Article(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목3", "내용3", 33));
+	}
 }
 
 class Article {
@@ -234,14 +253,19 @@ class Article {
 	String UpdateDate;	// 수정날짜
 	String Title;		// 제목
 	String Content;		// 내용
-
-	Article(int id, int count, String regDate, String updateDate, String title, String content) {
+	
+	// 조회수 X
+	// 메소드 오버로딩
+	Article(int id, String regDate, String updateDate, String title, String content) {
+		this(id, regDate, updateDate, title, content, 0);
+	}
+	
+	Article(int id, String regDate, String updateDate, String title, String content, int count) {
 		this.ID = id;
-		this.Count = 0;
 		this.RegDate = regDate;
 		this.UpdateDate = updateDate;
 		this.Title = title;
 		this.Content = content;
+		this.Count = count;
 	}
-
 }
