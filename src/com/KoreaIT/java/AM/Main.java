@@ -108,18 +108,20 @@ public class Main {
 				// 문자열을 정수형으로 형 변환
 				int num = Integer.parseInt(cmdDiv[2]);
 				
-				// 비어있다고 가정
-				Article foundArticle = null;
+				
+				Article foundArticle = getArticleId(num);
 				
 				// 게시물 있는지 판별 (배열 순회하여 비교)
-				for (int i = 0; i < articles_board.size(); i++) {
-					Article articles_detail = articles_board.get(i);
-					
-					if (articles_detail.ID == num) {
-						foundArticle = articles_detail;
-						break;
-					}
-				}
+				// 중복 구간 시작!! (중복 코드 -> 메소드 만들기)
+//				for (int i = 0; i < articles_board.size(); i++) {
+//					Article articles_detail = articles_board.get(i);
+//					
+//					if (articles_detail.ID == num) {
+//						foundArticle = articles_detail;
+//						break;		// 찾았으면 그만 찾아~
+//					}
+//				}
+				// 중복 구간 끝!!
 				
 				if (foundArticle == null) {	// 게시물 없는 경우
 					System.out.println(num + "번 게시물은 존재하지 않습니다.");
@@ -156,17 +158,7 @@ public class Main {
 				// 그래서 내가 찾는 글의 번호와 실제 인덱스의 값이 일치하지 않는다.
 				// 삭제 후 저장할 때 인덱스는 난 자리부터 채워지기 때문에
 				// 반드시 변수를 따로 지정해준다.
-				int foundIndex = -1;
-				
-				// 게시물 있는지 판별 (배열 순회하여 비교)
-				for (int i = 0; i < articles_board.size(); i++) {
-					Article articles_delete = articles_board.get(i);
-					
-					if (articles_delete.ID == num) {
-						foundIndex = i;
-						break;
-					}
-				}
+				int foundIndex = getArticleIndex(num);
 				
 				if (foundIndex == -1) {	// 게시물 없는 경우
 					System.out.println(num + "번 게시물은 존재하지 않습니다.");
@@ -194,16 +186,7 @@ public class Main {
 				
 				int num = Integer.parseInt(cmdDiv[2]);
 				
-				Article foundArticle = null;
-				
-				for (int i = 0; i < articles_board.size(); i++) {
-					Article articles_update = articles_board.get(i);
-					
-					if (articles_update.ID == num) {
-						foundArticle = articles_update;
-						break;
-					}
-				}
+				Article foundArticle = getArticleId(num);
 				
 				if (foundArticle == null) {	// 게시물 없는 경우
 					System.out.println(num + "번 게시물은 존재하지 않습니다.");
@@ -236,7 +219,57 @@ public class Main {
 		sc.close();
 	}
 	
+	// 4
+	private static int getArticleIndex(int num) {
+//		for (int i = 0; i < articles_board.size(); i++) {
+//			Article articles_find = articles_board.get(i);
+//			if (articles_find.ID == num) {
+//				return i;
+//			}
+//		}
+//		return -1;
+		
+		int i = 0;
+		for (Article articles_find : articles_board) {
+			if (articles_find.ID == num) {
+				return i;
+			}
+			i++;
+		}
+		return -1;
+	}
 	
+	
+	// 3, 5 중복 코드
+	private static Article getArticleId(int num) {
+//		for (int i = 0; i < articles_board.size(); i++) {
+//			Article articles_find = articles_board.get(i);
+//			
+//			if (articles_find.ID == num) {
+//				return articles_find;
+//			}
+//		}
+//		return null;
+		
+//		for (Article articles_find : articles_board) {
+//			if (articles_find.ID == num) {
+//				return articles_find;
+//			}
+//		}
+//		return null;
+		
+		int index = getArticleIndex(num);
+		
+		if (index != -1) {
+			return articles_board.get(index);
+		}
+		
+		return null;
+		
+	}
+	
+
+
 	// 단어 미리 입력하는 함수
 	public static void makeTestData() {
 		System.out.println("테스트를 위한 데이터를 생성합니다.");
@@ -244,6 +277,7 @@ public class Main {
 		articles_board.add(new Article(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목2", "내용2", 22));
 		articles_board.add(new Article(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목3", "내용3", 33));
 	}
+	
 }
 
 class Article {
