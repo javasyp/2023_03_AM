@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-
 	public static void main(String[] args) {
 		System.out.println("=== 프로그램 시작 ===");
 
@@ -13,9 +12,11 @@ public class Main {
 		
 		// 게시물을 담을 배열 리스트 생성
 		// 주의 ※ 반복문 안에 넣으면 계속 초기화 됨!!!
-		List<Article> articles_list = new ArrayList<>();
+		List<Article> articles_board = new ArrayList<>();
 
 		int lastId = 0;
+		
+		int count = 0;
 
 		while (true) {
 			System.out.print("명령어 > ");
@@ -39,18 +40,18 @@ public class Main {
 			// 리스트에 게시글이 있으면 최신순으로 글 내용 출력
 			// 없으면 "게시글이 없습니다." 출력
 			if (command.equals("article list")) {
-				if (articles_list.size() == 0) {
+				if (articles_board.size() == 0) {
 					
 					System.out.println("게시글이 없습니다.");
 
 				} else {
-					System.out.println("번호 / 제목");
+					System.out.println("번호 / 제목 / 조회");
 					
 					// 최신순으로 출력하기
-					for (int i = articles_list.size() - 1; i >= 0; i--) {
+					for (int i = articles_board.size() - 1; i >= 0; i--) {
 						
-						Article articles_body = articles_list.get(i); // 값 읽어와서 변수에 저장
-						System.out.println(" " + articles_body.ID + "  / " + articles_body.Title);
+						Article articles_list = articles_board.get(i); // 값 읽어와서 변수에 저장
+						System.out.println(" " + articles_list.ID + "  / " + articles_list.Title + " / " + articles_list.Count);
 					}
 				}
 			}
@@ -67,11 +68,11 @@ public class Main {
 				String content = sc.nextLine();
 				
 				// 작성 날짜 저장
-				String regdate = Util.getNowDateTimeStr();
+				String regDate = Util.getNowDateTimeStr();
 
 //				Article article = new Article(id, title, content);
-//				articles_list.add(article);				
-				articles_list.add(new Article(id, regdate, title, content));
+//				articles_board.add(article);
+				articles_board.add(new Article(id, count, regDate, regDate, title, content));
 
 				System.out.println(id + "번 글이 생성되었습니다.");
 				lastId++;
@@ -101,8 +102,8 @@ public class Main {
 				Article foundArticle = null;
 				
 				// 게시물 있는지 판별 (배열 순회하여 비교)
-				for (int i = 0; i < articles_list.size(); i++) {
-					Article articles_detail = articles_list.get(i);
+				for (int i = 0; i < articles_board.size(); i++) {
+					Article articles_detail = articles_board.get(i);
 					
 					if (articles_detail.ID == num) {
 						foundArticle = articles_detail;
@@ -115,10 +116,15 @@ public class Main {
 					continue;
 				}
 				
+				// 상세보기 할 때마다 조회수 증가
+				foundArticle.Count++;
+				
 				System.out.println("번호 : " + foundArticle.ID);
-				System.out.println("날짜 : " + foundArticle.RegDate);
+				System.out.println("작성날짜 : " + foundArticle.RegDate);
+				System.out.println("수정날짜 : " + foundArticle.UpdateDate);
 				System.out.println("제목 : " + foundArticle.Title);
 				System.out.println("내용 : " + foundArticle.Content);
+				System.out.println("조회수 : " + foundArticle.Count);
 				
 			}
 			
@@ -143,8 +149,8 @@ public class Main {
 				int foundIndex = -1;
 				
 				// 게시물 있는지 판별 (배열 순회하여 비교)
-				for (int i = 0; i < articles_list.size(); i++) {
-					Article articles_delete = articles_list.get(i);
+				for (int i = 0; i < articles_board.size(); i++) {
+					Article articles_delete = articles_board.get(i);
 					
 					if (articles_delete.ID == num) {
 						foundIndex = i;
@@ -157,9 +163,56 @@ public class Main {
 					continue;
 				}
 				
-				articles_list.remove(foundIndex);//이렇게 작성하면 인덱스가 당겨지기 때문에 
+				articles_board.remove(foundIndex); 
 				
 				System.out.println(num + "번 글이 삭제되었습니다.");
+				
+			}
+			
+			
+			// 5. 게시글 수정하기 - 3번 상세보기와 유사함
+			// "article modify 번호" 입력 시 없으면 "n번 게시물은 존재하지 않습니다."
+			// 있으면 수정된 내용 출력 후 "n번 게시물이 수정되었습니다." 출력
+			else if (command.startsWith("article modify")) {
+				
+				String[] cmdDiv = command.split(" ");
+				
+				if (cmdDiv.length < 3) {
+					System.out.println("명령어를 확인해 주세요.");
+					continue;
+				}
+				
+				int num = Integer.parseInt(cmdDiv[2]);
+				
+				Article foundArticle = null;
+				
+				for (int i = 0; i < articles_board.size(); i++) {
+					Article articles_update = articles_board.get(i);
+					
+					if (articles_update.ID == num) {
+						foundArticle = articles_update;
+						break;
+					}
+				}
+				
+				if (foundArticle == null) {	// 게시물 없는 경우
+					System.out.println(num + "번 게시물은 존재하지 않습니다.");
+					continue;
+				}
+				
+				System.out.print("새 제목 : ");
+				String new_title = sc.nextLine();
+				
+				System.out.print("새 내용 : ");
+				String new_content = sc.nextLine();
+				
+				String update_date = Util.getNowDateTimeStr();
+				
+				foundArticle.Title = new_title;
+				foundArticle.Content = new_content;
+				foundArticle.UpdateDate = update_date;
+				
+				System.out.println(num + "번 글이 수정되었습니다.");
 				
 			}
 			
@@ -175,14 +228,18 @@ public class Main {
 }
 
 class Article {
-	int ID;
-	String RegDate;
-	String Title;
-	String Content;
+	int ID;		// 글 번호
+	int Count;	// 글 조회수
+	String RegDate;		// 입력날짜
+	String UpdateDate;	// 수정날짜
+	String Title;		// 제목
+	String Content;		// 내용
 
-	Article(int id, String regdate, String title, String content) {
+	Article(int id, int count, String regDate, String updateDate, String title, String content) {
 		this.ID = id;
-		this.RegDate = regdate;
+		this.Count = 0;
+		this.RegDate = regDate;
+		this.UpdateDate = updateDate;
 		this.Title = title;
 		this.Content = content;
 	}
