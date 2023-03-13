@@ -33,19 +33,40 @@ public class Main {
 			}
 			
 			// 1. 게시판 목록 출력하기
-			if (command.equals("article list")) {
+			if (command.startsWith("article list")) {
 				if (articles_board.size() == 0) {
 					
 					System.out.println("게시글이 없습니다.");
+					continue;
 
-				} else {
-					System.out.println("번호 / 제목 / 조회");
+				} 
+				
+				// article list에서 제목 검색 시
+				String searchKeyword = command.substring("article list".length()).trim();
+				
+				List<Article> forPrintArticles = articles_board;
+				
+				if (searchKeyword.length() > 0) {	// 검색어가 있는 경우
+					System.out.println("검색어 : " + searchKeyword);
+					forPrintArticles = new ArrayList<>();
 					
-					for (int i = articles_board.size() - 1; i >= 0; i--) {
-						
-						Article articles_list = articles_board.get(i); // 값 읽어와서 변수에 저장
-						System.out.println(" " + articles_list.ID + "  / " + articles_list.Title + " / " + articles_list.Count);
+					for (Article articles_list : articles_board) {
+						if (articles_list.Title.contains(searchKeyword)) {
+							forPrintArticles.add(articles_list);
+						}
 					}
+					if (forPrintArticles.size() == 0) {
+						System.out.println("검색 결과가 없습니다.");
+						continue;
+					}
+				}
+				
+				System.out.println("번호 / 제목 / 조회");	// 검색어가 없는 경우
+				
+				for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
+					
+					Article articles_list = forPrintArticles.get(i); // 값 읽어와서 변수에 저장
+					System.out.println(" " + articles_list.ID + "  / " + articles_list.Title + " / " + articles_list.Count);
 				}
 			}
 			
@@ -159,8 +180,7 @@ public class Main {
 				int id = lastMemberId + 1;
 				String regdate = Util.getNowDateTimeStr();
 				
-				String join_id = null; 
-				
+				String join_id = null;		// while문에서 돌아가기 때문에 초기화 해줘야함.
 				
 				// 중복 검사
 				while (true) {
@@ -168,25 +188,38 @@ public class Main {
 					join_id = sc.nextLine();
 					
 					if (isJoinableId(join_id) == false) {
-						System.out.println("이미 사용중인 아이디입니다");
+						System.out.println("이미 사용중인 아이디입니다.");
 						continue;
 					}
 					break;
 				}
 				
-				System.out.print("비밀번호 : ");
-				String join_pw = sc.nextLine();
+				// 비밀번호 확인
+				String join_pw = null;
+				String join_pw_ck = null;
 				
-//				System.out.print("비밀번호 확인 : ");
-//				String join_pw_ck = sc.nextLine();
+				while (true) {
+					System.out.print("비밀번호 : ");
+					join_pw = sc.nextLine();
+					System.out.print("비밀번호 확인 : ");
+					join_pw_ck = sc.nextLine();
+					
+					if (join_pw.equals(join_pw_ck) == false) {
+						System.out.println("비밀번호가 일치하지 않습니다.");
+						continue;
+					}
+					break;
+				}
+				
 				
 				System.out.print("이름 : ");
 				String join_name = sc.nextLine();
 				
+				
 				Member members = new Member(id, regdate, regdate, join_id, join_pw, join_name);
 				members_board.add(members);
 				
-				System.out.println(id + "회원가입이 되었습니다.");
+				System.out.println(id + "번 회원이 가입되었습니다.");
 				lastMemberId++;
 			}
 			
