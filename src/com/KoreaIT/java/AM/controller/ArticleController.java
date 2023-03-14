@@ -72,7 +72,7 @@ public class ArticleController extends Controller {
 		
 		String regDate = Util.getNowDateTimeStr();
 
-		Article article = new Article(id, regDate, regDate, title, content);
+		Article article = new Article(id, loginedMember.ID, regDate, regDate, title, content);
 		articles_board.add(article);
 
 		System.out.println(id + "번 글이 생성되었습니다.");
@@ -229,8 +229,8 @@ public class ArticleController extends Controller {
 	// 테스트 데이터
 	public void makeTestData() {		// static -> public
 		System.out.println("테스트를 위한 게시글 데이터를 생성합니다.");
-		articles_board.add(new Article(1, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목1", "내용1", 11));
-		articles_board.add(new Article(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목2", "내용2", 22));
-		articles_board.add(new Article(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목3", "내용3", 33));
+		articles_board.add(new Article(1, 3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목1", "내용1", 11));
+		articles_board.add(new Article(2, 2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목2", "내용2", 22));
+		articles_board.add(new Article(3, 2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목3", "내용3", 33));
 	}
 }
