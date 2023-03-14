@@ -33,6 +33,7 @@ public class App {
 			Controller controller;
 			
 			articleControl.makeTestData();
+			memberControl.makeTestData();
 
 			while (true) {
 				System.out.print("명령어 > ");

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.KoreaIT.java.AM.dto.Article;
 import com.KoreaIT.java.AM.dto.Member;
 import com.KoreaIT.java.AM.util.Util;
 
@@ -33,13 +34,51 @@ public class MemberController extends Controller {
 		case "login":
 			doLogin();
 			break;
+		case "profile":
+			showProfile();
+			break;
+		case "logout":
+			doLogout();
+			break;
 		default:
 			System.out.println("해당 기능은 사용할 수 없습니다.");
 			break;
 		}
 	}
+	
+	// 중복 로그인/로그아웃을 막기 위한 함수
+	private boolean isLogined() {
+		return loginedMember != null; // 로그인 상태이면 t 아니면 f
+	}
+
+	private void doLogout() {
+		if (isLogined() == false) {
+			System.out.println("로그인 후 이용해 주세요.");
+			return;
+		}
+		
+		loginedMember = null;
+		System.out.println("로그아웃 되었습니다.");
+	}
+
+	private void showProfile() {
+		if (isLogined() == false) {
+			System.out.println("로그인 후 이용해 주세요.");
+			return;
+		}
+		
+		System.out.println("== 현재 로그인한 회원의 정보 ==");
+		System.out.println("로그인 아이디 : " + loginedMember.loginId);
+		System.out.println("이름 : " + loginedMember.name);
+		
+	}
 
 	private void doLogin() {
+		if (isLogined()) {	// 로그인 상태이면
+			System.out.println("로그아웃 후 이용해 주세요.");
+			return;
+		}
+		
 		System.out.print("로그인 아이디 : ");
 		String loginId = sc.nextLine();
 		
@@ -142,6 +181,14 @@ public class MemberController extends Controller {
 			i++;
 		}
 		return -1;
+	}
+	
+	// 테스트 데이터
+	public void makeTestData() {
+		System.out.println("테스트를 위한 회원 데이터를 생성합니다.");
+		members_board.add(new Member(1, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test1", "test1", "홍길동"));
+		members_board.add(new Member(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test2", "test2", "김영희"));
+		members_board.add(new Member(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test3", "test3", "김철수"));
 	}
 
 }
