@@ -14,9 +14,6 @@ public class MemberController extends Controller {
 	private Scanner sc;
 	private String command;
 	private String actionMethodName;
-	
-	private Member loginedMember;	// 로그인 상태인지 확인하는 변수
-	// 다른 데서도 사용하고, 수명을 길게 하기 위해 전역변수로 사용
 
 	public MemberController(Scanner sc) {
 		this.members_board = new ArrayList<>();
@@ -46,14 +43,9 @@ public class MemberController extends Controller {
 		}
 	}
 	
-	// 중복 로그인/로그아웃을 막기 위한 함수
-	private boolean isLogined() {
-		return loginedMember != null; // 로그인 상태이면 t 아니면 f
-	}
-
 	private void doLogout() {
 		if (isLogined() == false) {
-			System.out.println("로그인 후 이용해 주세요.");
+			System.out.println("로그인 상태가 아닙니다.");
 			return;
 		}
 		
@@ -75,7 +67,7 @@ public class MemberController extends Controller {
 
 	private void doLogin() {
 		if (isLogined()) {	// 로그인 상태이면
-			System.out.println("로그아웃 후 이용해 주세요.");
+			System.out.println("이미 로그인 상태입니다.");
 			return;
 		}
 		
@@ -107,6 +99,11 @@ public class MemberController extends Controller {
 	int lastMemberId = 0;
 	
 	private void doJoin() {
+		if (isLogined()) {	// 로그인 상태이면
+			System.out.println("로그아웃 후 이용해 주세요.");
+			return;
+		}
+		
 		int id = lastMemberId + 1;
 		String regDate = Util.getNowDateTimeStr();
 		

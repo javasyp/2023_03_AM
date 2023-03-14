@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import com.KoreaIT.java.AM.dto.Article;
 import com.KoreaIT.java.AM.util.Util;
+import com.KoreaIT.java.AM.controller.MemberController;
 
 public class ArticleController extends Controller {
 	List<Article> articles_board;
@@ -49,6 +50,11 @@ public class ArticleController extends Controller {
 	
 	// 입력
 	public void doWrite() {
+		if (isLogined() == false) {
+			System.out.println("로그인 후 이용해 주세요.");
+			return;
+		}
+		
 		int id = lastArticleId + 1;
 
 		System.out.print("제목 : ");
@@ -66,7 +72,7 @@ public class ArticleController extends Controller {
 		lastArticleId++;
 			
 	}
-	
+
 	// 목록
 	public void showList() {
 		if (articles_board.size() == 0) {
