@@ -40,7 +40,7 @@ public class ArticleController extends Controller {
 			doDelete();
 			break;
 		default:
-			System.out.println("존재하지 않는 명령어입니다.");
+			System.out.println("해당 기능은 사용할 수 없습니다.");
 			break;
 		}
 	}
