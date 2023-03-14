@@ -6,13 +6,27 @@ import java.util.Scanner;
 import com.KoreaIT.java.AM.dto.Member;
 import com.KoreaIT.java.AM.util.Util;
 
-public class MemberController {
+public class MemberController extends Controller {
 	List<Member> members_board;
+	
 	private Scanner sc;
+	private String command;
+	private String actionMethodName;
 
 	public MemberController(List<Member> members, Scanner sc) {
 		this.members_board = members;
 		this.sc = sc;
+	}
+	
+	public void doAction(String actionMethodName, String command) {
+		this.command = command;
+		this.actionMethodName = actionMethodName;
+
+		switch (actionMethodName) {
+		case "join":
+			doJoin();
+			break;
+		}
 	}
 	
 	int lastMemberId = 0;
@@ -60,7 +74,6 @@ public class MemberController {
 		
 		System.out.println(id + "번 회원이 가입되었습니다.");
 		lastMemberId++;
-		
 	}
 	
 	//중복 검사
@@ -70,7 +83,6 @@ public class MemberController {
 		if (index == -1) {
 			return true;
 		}
-		
 		return false;
 	}
 	

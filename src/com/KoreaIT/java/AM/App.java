@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.KoreaIT.java.AM.controller.Controller;
 import com.KoreaIT.java.AM.controller.ArticleController;
 import com.KoreaIT.java.AM.controller.MemberController;
 import com.KoreaIT.java.AM.dto.Article;
@@ -29,6 +30,10 @@ public class App {
 			
 			// 아티클 컨트롤러 생성
 			ArticleController articleControl = new ArticleController(articles_board, sc);
+			
+			// 멤버와 아티클을 다룰 컨트롤러 생성 (부모 클래스) - 초기화되지 않기 위해 반복문 밖에 생성
+			Controller controller;
+			
 			articleControl.makeTestData();
 
 			while (true) {
@@ -44,6 +49,33 @@ public class App {
 					break;
 				}
 				
+				// 첫번째 단어로 구분 지음
+				String[] commandDiv = command.split(" ");	// article delete ! / member join
+				
+				String controllerName = commandDiv[0];	// article 또는 member
+				
+				if (commandDiv.length == 1) { // article 또는 member만 입력한 경우
+					System.out.println("명령어를 확인해 주세요.");
+					continue;
+				}
+				
+				String actionMethodName = commandDiv[1];	// 실질적인 일 (write, delete)
+				
+				controller = null;
+				
+				// 컨트롤러의 이름에 따라 그때 그때마다 컨트롤러를 바꿔준다.
+				if (controllerName.equals("article")) {
+					controller = articleControl;
+				} else if (controllerName.equals("member")) {
+					controller = memberControl;
+				} else {
+					System.out.println("존재하지 않는 명령어입니다.");
+					continue;
+				}
+				
+				controller.doAction(actionMethodName, command);
+				
+				/*
 				// 1. 게시판 목록 출력하기
 				if (command.startsWith("article list")) {
 					articleControl.showList(command);
@@ -77,6 +109,7 @@ public class App {
 				else {
 					System.out.println("존재하지 않는 명령어입니다.");
 				}
+				*/
 			}
 
 			System.out.println("=== 프로그램 종료 ===");
