@@ -1,5 +1,6 @@
 package com.KoreaIT.java.AM.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,8 +14,8 @@ public class MemberController extends Controller {
 	private String command;
 	private String actionMethodName;
 
-	public MemberController(List<Member> members, Scanner sc) {
-		this.members_board = members;
+	public MemberController(Scanner sc) {
+		this.members_board = new ArrayList<>();;
 		this.sc = sc;
 	}
 	
@@ -26,9 +27,12 @@ public class MemberController extends Controller {
 		case "join":
 			doJoin();
 			break;
+		default:
+			System.out.println("존재하지 않는 명령어입니다.");
+			break;
 		}
 	}
-	
+
 	int lastMemberId = 0;
 	
 	public void doJoin() {
@@ -37,7 +41,7 @@ public class MemberController extends Controller {
 		
 		String join_id = null;		// while문에서 돌아가기 때문에 초기화 해줘야함.
 		
-		// 중복 검사
+		// 아이디 중복 검사
 		while (true) {
 			System.out.print("아이디 : ");
 			join_id = sc.nextLine();
@@ -75,6 +79,7 @@ public class MemberController extends Controller {
 		System.out.println(id + "번 회원이 가입되었습니다.");
 		lastMemberId++;
 	}
+	
 	
 	//중복 검사
 	private boolean isJoinableId(String loginId) {

@@ -16,8 +16,6 @@ public class App {
 		List<Member> members_board;
 		
 		public App() {
-			articles_board = new ArrayList<>();
-			members_board = new ArrayList<>();
 		}
 		
 		public void start() {
@@ -26,10 +24,10 @@ public class App {
 			Scanner sc = new Scanner(System.in);
 			
 			// 멤버 컨트롤러 생성
-			MemberController memberControl = new MemberController(members_board, sc);
+			MemberController memberControl = new MemberController(sc);
 			
 			// 아티클 컨트롤러 생성
-			ArticleController articleControl = new ArticleController(articles_board, sc);
+			ArticleController articleControl = new ArticleController(sc);
 			
 			// 멤버와 아티클을 다룰 컨트롤러 생성 (부모 클래스) - 초기화되지 않기 위해 반복문 밖에 생성
 			Controller controller;
@@ -54,16 +52,17 @@ public class App {
 				
 				String controllerName = commandDiv[0];	// article 또는 member
 				
-				if (commandDiv.length == 1) { // article 또는 member만 입력한 경우
+				// article 또는 member만 입력한 경우
+				if (commandDiv.length == 1) {
 					System.out.println("명령어를 확인해 주세요.");
 					continue;
 				}
 				
-				String actionMethodName = commandDiv[1];	// 실질적인 일 (write, delete)
+				String actionMethodName = commandDiv[1];	// 실질적인 일 (write, delete 등)
 				
 				controller = null;
 				
-				// 컨트롤러의 이름에 따라 그때 그때마다 컨트롤러를 바꿔준다.
+				// 컨트롤러의 이름에 따라 그때그때 마다 컨트롤러를 바꿔준다.
 				if (controllerName.equals("article")) {
 					controller = articleControl;
 				} else if (controllerName.equals("member")) {
