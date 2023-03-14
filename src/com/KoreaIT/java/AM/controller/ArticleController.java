@@ -26,6 +26,10 @@ public class ArticleController extends Controller {
 
 		switch (actionMethodName) {
 		case "write":
+			if (isLogined() == false) {
+				System.out.println("로그인 상태가 아닙니다");
+				break;
+			}
 			doWrite();
 			break;
 		case "list":
@@ -35,9 +39,17 @@ public class ArticleController extends Controller {
 			showDetail();
 			break;
 		case "modify":
+			if (isLogined() == false) {
+				System.out.println("로그인 상태가 아닙니다");
+				break;
+			}
 			doModify();
 			break;
 		case "delete":
+			if (isLogined() == false) {
+				System.out.println("로그인 상태가 아닙니다");
+				break;
+			}
 			doDelete();
 			break;
 		default:
@@ -50,11 +62,6 @@ public class ArticleController extends Controller {
 	
 	// 입력
 	public void doWrite() {
-		if (isLogined() == false) {
-			System.out.println("로그인 후 이용해 주세요.");
-			return;
-		}
-		
 		int id = lastArticleId + 1;
 
 		System.out.print("제목 : ");
