@@ -61,7 +61,7 @@ public class App {
 				
 				String actionMethodName = commandDiv[1];	// 실질적인 일 (write, delete 등)
 				
-				// 로그인/로그아웃 확인
+				// 로그인/로그아웃 상태를 확인하기 위한 변수
 				String forLoginCheck = controllerName + "/" + actionMethodName;
 				
 				controller = null;
@@ -75,7 +75,7 @@ public class App {
 					continue;
 				}
 				
-				// 로그인 확인
+				// 로그아웃 상태에서 해당 단어 입력 시 차단
 				switch (forLoginCheck) {
 				case "article/write":
 				case "article/modify":
@@ -89,7 +89,7 @@ public class App {
 					break;
 				}
 				
-				// 로그아웃 확인
+				// 로그인 상태에서 해당 단어 입력 시 차단
 				switch (forLoginCheck) {
 				case "member/login":
 				case "member/join":

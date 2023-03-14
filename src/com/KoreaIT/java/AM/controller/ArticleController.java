@@ -124,8 +124,6 @@ public class ArticleController extends Controller {
 			return;
 		}
 		
-		foundArticle.Count++;
-		
 		System.out.println("번호 : " + foundArticle.ID);
 		System.out.println("작성날짜 : " + foundArticle.RegDate);
 		System.out.println("수정날짜 : " + foundArticle.UpdateDate);
@@ -133,6 +131,8 @@ public class ArticleController extends Controller {
 		System.out.println("제목 : " + foundArticle.Title);
 		System.out.println("내용 : " + foundArticle.Content);
 		System.out.println("조회수 : " + foundArticle.Count);
+		
+		foundArticle.Count++;
 	}
 	
 	// 수정
@@ -150,6 +150,11 @@ public class ArticleController extends Controller {
 		
 		if (foundArticle == null) {
 			System.out.println(num + "번 게시물은 존재하지 않습니다.");
+			return;
+		}
+		
+		if (foundArticle.MemberId != loginedMember.ID) {
+			System.out.println("권한이 없습니다");
 			return;
 		}
 		
@@ -179,15 +184,21 @@ public class ArticleController extends Controller {
 		}
 		
 		int num = Integer.parseInt(cmdDiv[2]);
-
-		int foundIndex = getArticleIndex(num);
 		
-		if (foundIndex == -1) {
+		// index 대신 객체 사용
+		Article foundArticle = getArticleId(num);
+		
+		if (foundArticle == null) {
 			System.out.println(num + "번 게시물은 존재하지 않습니다.");
 			return;
 		}
 		
-		articles_board.remove(foundIndex); 
+		if (foundArticle.MemberId != loginedMember.ID) {
+			System.out.println("권한이 없습니다");
+			return;
+		}
+		
+		articles_board.remove(foundArticle); 
 		
 		System.out.println(num + "번 글이 삭제되었습니다.");
 		
