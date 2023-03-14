@@ -6,7 +6,6 @@ import java.util.Scanner;
 
 import com.KoreaIT.java.AM.dto.Article;
 import com.KoreaIT.java.AM.util.Util;
-import com.KoreaIT.java.AM.controller.MemberController;
 
 public class ArticleController extends Controller {
 	List<Article> articles_board;
@@ -26,10 +25,6 @@ public class ArticleController extends Controller {
 
 		switch (actionMethodName) {
 		case "write":
-			if (isLogined() == false) {
-				System.out.println("로그인 상태가 아닙니다");
-				break;
-			}
 			doWrite();
 			break;
 		case "list":
@@ -39,17 +34,9 @@ public class ArticleController extends Controller {
 			showDetail();
 			break;
 		case "modify":
-			if (isLogined() == false) {
-				System.out.println("로그인 상태가 아닙니다");
-				break;
-			}
 			doModify();
 			break;
 		case "delete":
-			if (isLogined() == false) {
-				System.out.println("로그인 상태가 아닙니다");
-				break;
-			}
 			doDelete();
 			break;
 		default:
@@ -109,12 +96,12 @@ public class ArticleController extends Controller {
 			}
 		}
 		
-		System.out.println("번호 / 제목 / 조회");	// 검색어가 없는 경우
+		System.out.println("번호 / 제목 / 조회 / 작성자");	// 검색어가 없는 경우
 		
 		for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
 			
 			Article articles_list = forPrintArticles.get(i); // 값 읽어와서 변수에 저장
-			System.out.println(" " + articles_list.ID + "  / " + articles_list.Title + " / " + articles_list.Count);
+			System.out.println(" " + articles_list.ID + "  / " + articles_list.Title + " / " + articles_list.Count + " / " + articles_list.MemberId);
 		}
 	}
 	
@@ -142,6 +129,7 @@ public class ArticleController extends Controller {
 		System.out.println("번호 : " + foundArticle.ID);
 		System.out.println("작성날짜 : " + foundArticle.RegDate);
 		System.out.println("수정날짜 : " + foundArticle.UpdateDate);
+		System.out.println("작성자 : " + foundArticle.MemberId);
 		System.out.println("제목 : " + foundArticle.Title);
 		System.out.println("내용 : " + foundArticle.Content);
 		System.out.println("조회수 : " + foundArticle.Count);

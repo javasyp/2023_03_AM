@@ -61,9 +61,11 @@ public class App {
 				
 				String actionMethodName = commandDiv[1];	// 실질적인 일 (write, delete 등)
 				
+				// 로그인/로그아웃 확인
+				String forLoginCheck = controllerName + "/" + actionMethodName;
+				
 				controller = null;
 				
-				// 컨트롤러의 이름에 따라 그때그때 마다 컨트롤러를 바꿔준다.
 				if (controllerName.equals("article")) {
 					controller = articleControl;
 				} else if (controllerName.equals("member")) {
@@ -73,47 +75,37 @@ public class App {
 					continue;
 				}
 				
+				// 로그인 확인
+				switch (forLoginCheck) {
+				case "article/write":
+				case "article/modify":
+				case "article/delete":
+				case "member/logout":
+				case "member/profile":
+					if (Controller.isLogined() == false) {
+						System.out.println("로그인 후 이용해주세요");
+						continue;
+					}
+					break;
+				}
+				
+				// 로그아웃 확인
+				switch (forLoginCheck) {
+				case "member/login":
+				case "member/join":
+					if (Controller.isLogined()) {
+						System.out.println("로그아웃 후 이용해주세요");
+						continue;
+					}
+					break;
+				}
+				
 				controller.doAction(actionMethodName, command);
 				
-				/*
-				// 1. 게시판 목록 출력하기
-				if (command.startsWith("article list")) {
-					articleControl.showList(command);
-				}
-				
-				// 2. 게시글 입력하기
-				else if (command.equals("article write")) {
-					articleControl.doWrite();
-				}
-				
-				// 3. 게시글의 세부사항 출력하기
-				else if (command.startsWith("article detail")) {
-					articleControl.showDetail(command);
-				}
-				
-				// 4. 게시글 삭제하기
-				else if (command.startsWith("article delete")) {
-					articleControl.doDelete(command);
-				}
-				
-				// 5. 게시글 수정하기
-				else if (command.startsWith("article modify")) {
-					articleControl.doModify(command);
-				}
-				
-				// 6. 회원가입
-				else if (command.equals("member join")) {
-					memberControl.doJoin();
-				}
-				
-				else {
-					System.out.println("존재하지 않는 명령어입니다.");
-				}
-				*/
 			}
 
 			System.out.println("=== 프로그램 종료 ===");
 
 			sc.close();
-		}
+		}		
 }

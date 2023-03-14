@@ -44,21 +44,11 @@ public class MemberController extends Controller {
 	}
 	
 	private void doLogout() {
-		if (isLogined() == false) {
-			System.out.println("로그인 상태가 아닙니다.");
-			return;
-		}
-		
 		loginedMember = null;
 		System.out.println("로그아웃 되었습니다.");
 	}
 
 	private void showProfile() {
-		if (isLogined() == false) {
-			System.out.println("로그인 후 이용해 주세요.");
-			return;
-		}
-		
 		System.out.println("== 현재 로그인한 회원의 정보 ==");
 		System.out.println("로그인 아이디 : " + loginedMember.loginId);
 		System.out.println("이름 : " + loginedMember.name);
@@ -66,11 +56,6 @@ public class MemberController extends Controller {
 	}
 
 	private void doLogin() {
-		if (isLogined()) {	// 로그인 상태이면
-			System.out.println("이미 로그인 상태입니다.");
-			return;
-		}
-		
 		System.out.print("로그인 아이디 : ");
 		String loginId = sc.nextLine();
 		
@@ -99,11 +84,6 @@ public class MemberController extends Controller {
 	int lastMemberId = 0;
 	
 	private void doJoin() {
-		if (isLogined()) {	// 로그인 상태이면
-			System.out.println("로그아웃 후 이용해 주세요.");
-			return;
-		}
-		
 		int id = lastMemberId + 1;
 		String regDate = Util.getNowDateTimeStr();
 		

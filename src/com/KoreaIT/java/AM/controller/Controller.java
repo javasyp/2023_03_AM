@@ -8,11 +8,11 @@ public abstract class Controller {
 	
 	public void makeTestData() {
 		
-	}	// public abstract void makeTestData(); 이렇게 써도 됨.
+	}
 	
 	protected static Member loginedMember = null;
 
-	public boolean isLogined() {
+	public static boolean isLogined() {	// App에서 사용하기 위해 static 추가
 		return loginedMember != null;
 	}
 }
