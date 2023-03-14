@@ -14,8 +14,8 @@ public class ArticleController extends Controller {
 	private String command;
 	private String actionMethodName;
 
-	public ArticleController(List<Article> articles, Scanner sc) {
-		this.articles_board = articles;
+	public ArticleController(Scanner sc) {
+		this.articles_board = new ArrayList<>();;
 		this.sc = sc;
 	}
 	
@@ -38,6 +38,9 @@ public class ArticleController extends Controller {
 			break;
 		case "delete":
 			doDelete();
+			break;
+		default:
+			System.out.println("해당 기능은 사용할 수 없습니다.");
 			break;
 		}
 	}
