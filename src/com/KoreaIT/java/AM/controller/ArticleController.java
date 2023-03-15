@@ -51,8 +51,8 @@ public class ArticleController extends Controller {
 	
 	// 입력
 	public void doWrite() {
-		// 직접 DB에 넣기 X 현재 DB는 Dao에 있기 때문에(A.L) 컨테이너를 통해 넣는 것
-		int id = Container.articleDao.setNewId();
+		// 컨트롤러 -> 서비스 -> dao
+		int id = articleService.setNewId();
 
 		System.out.print("제목 : ");
 		String title = sc.nextLine();
@@ -65,7 +65,8 @@ public class ArticleController extends Controller {
 		Article article = new Article(id, loginedMember.ID, regDate, regDate, title, content);
 //		articles_board.add(article);	// 직접 DB에 추가
 //		Container.articleDao.articles.add(article);
-		Container.articleDao.add(article);		// 컨테이너를 통해 간접 추가
+//		Container.articleDao.add(article);		// 컨테이너를 통해 창고에 간접 추가
+		articleService.add(article);
 		
 		System.out.println(id + "번 글이 생성되었습니다.");
 	}
@@ -115,7 +116,7 @@ public class ArticleController extends Controller {
 		
 		int num = Integer.parseInt(cmdDiv[2]);
 		
-		Article foundArticle = getArticleId(num);
+		Article foundArticle = articleService.getArticleById(num);
 		
 		if (foundArticle == null) {
 			System.out.println(num + "번 게시물은 존재하지 않습니다.");
@@ -134,6 +135,8 @@ public class ArticleController extends Controller {
 			}
 		}
 		
+		foundArticle.Count++;
+		
 		System.out.println("번호 : " + foundArticle.ID);
 		System.out.println("작성날짜 : " + foundArticle.RegDate);
 		System.out.println("수정날짜 : " + foundArticle.UpdateDate);
@@ -141,8 +144,6 @@ public class ArticleController extends Controller {
 		System.out.println("제목 : " + foundArticle.Title);
 		System.out.println("내용 : " + foundArticle.Content);
 		System.out.println("조회수 : " + foundArticle.Count);
-		
-		foundArticle.Count++;
 	}
 	
 	// 수정
@@ -156,7 +157,7 @@ public class ArticleController extends Controller {
 		
 		int num = Integer.parseInt(cmdDiv[2]);
 		
-		Article foundArticle = getArticleId(num);
+		Article foundArticle = articleService.getArticleById(num);
 		
 		if (foundArticle == null) {
 			System.out.println(num + "번 게시물은 존재하지 않습니다.");
@@ -196,7 +197,7 @@ public class ArticleController extends Controller {
 		int num = Integer.parseInt(cmdDiv[2]);
 		
 		// index 대신 객체 사용
-		Article foundArticle = getArticleId(num);
+		Article foundArticle = articleService.getArticleById(num);
 		
 		if (foundArticle == null) {
 			System.out.println(num + "번 게시물은 존재하지 않습니다.");
@@ -208,39 +209,18 @@ public class ArticleController extends Controller {
 			return;
 		}
 		
-		articles_board.remove(foundArticle); 
+		articleService.remove(foundArticle); 
 		
 		System.out.println(num + "번 글이 삭제되었습니다.");
 		
-	}
-	
-	private Article getArticleId(int num) {
-		int index = getArticleIndex(num);
-		
-		if (index != -1) {
-			return articles_board.get(index);
-		}
-		
-		return null;
-	}
-	
-	private int getArticleIndex(int num) {
-		int i = 0;
-		for (Article articles_find : articles_board) {
-			if (articles_find.ID == num) {
-				return i;
-			}
-			i++;
-		}
-		return -1;
 	}
 	
 	// 테스트 데이터
 	public void makeTestData() {		// static -> public
 		System.out.println("테스트를 위한 게시글 데이터를 생성합니다.");
 		// 1번 김철수, 2번 김영희, 3번 홍길동
-		Container.articleDao.add(new Article(1, 3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목1", "내용1", 11));	// 홍길동
-		Container.articleDao.add(new Article(2, 2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목2", "내용2", 22));	// 김영희
-		Container.articleDao.add(new Article(3, 2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목3", "내용3", 33));	// 김영희
+		articleService.add(new Article(1, 3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목1", "내용1", 11));	// 홍길동
+		articleService.add(new Article(2, 2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목2", "내용2", 22));	// 김영희
+		articleService.add(new Article(3, 2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목3", "내용3", 33));	// 김영희
 	}
 }
