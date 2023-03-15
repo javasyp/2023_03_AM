@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.KoreaIT.java.AM.container.Container;
 import com.KoreaIT.java.AM.dto.Article;
+import com.KoreaIT.java.AM.dto.Member;
 import com.KoreaIT.java.AM.util.Util;
 
 public class ArticleController extends Controller {
@@ -15,7 +17,7 @@ public class ArticleController extends Controller {
 	private String actionMethodName;
 
 	public ArticleController(Scanner sc) {
-		this.articles_board = new ArrayList<>();;
+		this.articles_board = Container.articleDao.articles;
 		this.sc = sc;
 	}
 	
@@ -96,12 +98,16 @@ public class ArticleController extends Controller {
 			}
 		}
 		
+		String writerName = null;
+
+		List<Member> members = Container.memberDao.members;
+		
 		System.out.println("번호 / 제목 / 조회 / 작성자");	// 검색어가 없는 경우
 		
 		for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
 			
 			Article articles_list = forPrintArticles.get(i); // 값 읽어와서 변수에 저장
-			System.out.println(" " + articles_list.ID + "  / " + articles_list.Title + " / " + articles_list.Count + " / " + articles_list.MemberId);
+			System.out.println(" " + articles_list.ID + "  / " + articles_list.Title + " / " + articles_list.Count + " / " + writerName);
 		}
 	}
 	

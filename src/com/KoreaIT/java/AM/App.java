@@ -1,23 +1,13 @@
 package com.KoreaIT.java.AM;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import com.KoreaIT.java.AM.controller.Controller;
 import com.KoreaIT.java.AM.controller.ArticleController;
 import com.KoreaIT.java.AM.controller.MemberController;
-import com.KoreaIT.java.AM.dto.Article;
-import com.KoreaIT.java.AM.dto.Member;
 
 public class App {
 	
-		List<Article> articles_board;
-		List<Member> members_board;
-		
-		public App() {
-		}
-		
 		public void start() {
 			System.out.println("=== 프로그램 시작 ===");
 			
@@ -61,9 +51,6 @@ public class App {
 				
 				String actionMethodName = commandDiv[1];	// 실질적인 일 (write, delete 등)
 				
-				// 로그인/로그아웃 상태를 확인하기 위한 변수
-				String forLoginCheck = controllerName + "/" + actionMethodName;
-				
 				controller = null;
 				
 				if (controllerName.equals("article")) {
@@ -74,6 +61,9 @@ public class App {
 					System.out.println("존재하지 않는 명령어입니다.");
 					continue;
 				}
+				
+				// 로그인/로그아웃 상태를 확인하기 위한 변수
+				String forLoginCheck = controllerName + "/" + actionMethodName;
 				
 				// 로그아웃 상태에서 해당 단어 입력 시 차단
 				switch (forLoginCheck) {
