@@ -56,27 +56,29 @@ public class MemberController extends Controller {
 	}
 
 	private void doLogin() {
+		// 아이디, 비밀번호 필수 정보 입력시키기
 		Member member = null;
+		
 		String loginId = null;
 		String loginPw = null;
 
 		while (true) {
-			System.out.print("로그인 아이디 : ");
+			System.out.print("아이디 : ");
 			loginId = sc.nextLine();
 
 			if (loginId.length() == 0) {
-				System.out.println("아이디를 입력해주세요");
+				System.out.println("아이디를 입력해 주세요.");
 				continue;
 			}
 			break;
 		}
 		
 		while (true) {
-			System.out.print("로그인 비밀번호 : ");
+			System.out.print("비밀번호 : ");
 			loginPw = sc.nextLine();
 
 			if (loginPw.length() == 0) {
-				System.out.println("비밀번호를 입력해주세요");
+				System.out.println("비밀번호를 입력해 주세요.");
 				continue;
 			}
 			break;

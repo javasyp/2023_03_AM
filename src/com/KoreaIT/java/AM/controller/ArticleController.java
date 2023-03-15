@@ -7,18 +7,20 @@ import java.util.Scanner;
 import com.KoreaIT.java.AM.container.Container;
 import com.KoreaIT.java.AM.dto.Article;
 import com.KoreaIT.java.AM.dto.Member;
+import com.KoreaIT.java.AM.service.ArticleService;
 import com.KoreaIT.java.AM.util.Util;
 
 public class ArticleController extends Controller {
-	List<Article> articles_board;
+	private List<Article> articles_board;
 	
 	private Scanner sc;
 	private String command;
 	private String actionMethodName;
+	private ArticleService articleService;
 
 	public ArticleController(Scanner sc) {
-		this.articles_board = Container.articleDao.articles;
 		this.sc = sc;
+		this.articleService = Container.articleService;
 	}
 	
 	public void doAction(String actionMethodName, String command) {
@@ -70,31 +72,14 @@ public class ArticleController extends Controller {
 
 	// 목록
 	public void showList() {
-		if (articles_board.size() == 0) {
-			
-			System.out.println("게시글이 없습니다.");
-//			continue; // 반복문의 제어 continue (에러) -> 리턴을 써준다.
-			return;
-		}
 		
 		String searchKeyword = command.substring("article list".length()).trim();
 		
-		List<Article> forPrintArticles = articles_board;
+		List<Article> forPrintArticles = articleService.getForPrintArticles(searchKeyword);
 		
-		if (searchKeyword.length() > 0) {	// 검색어가 있는 경우
-			System.out.println("검색어 : " + searchKeyword);
-			forPrintArticles = new ArrayList<>();
-			
-			for (Article articles_list : articles_board) {
-				if (articles_list.Title.contains(searchKeyword)) {
-					forPrintArticles.add(articles_list);
-				}
-			}
-			if (forPrintArticles.size() == 0) {
-				System.out.println("검색 결과가 없습니다.");
-//				continue;
-				return;
-			}
+		if (forPrintArticles.size() == 0) {
+			System.out.println("게시글이 없습니다");
+			return;
 		}
 		
 		System.out.println("번호 / 제목 / 조회 / 작성자");	// 검색어가 없는 경우
@@ -137,10 +122,22 @@ public class ArticleController extends Controller {
 			return;
 		}
 		
+		// 작성자의 이름 출력하기
+		String writerName = null;
+		
+		List<Member> members = Container.memberDao.members;
+		
+		for (Member member : members) {
+			if (foundArticle.MemberId == member.ID) {
+				writerName = member.name;
+				break;
+			}
+		}
+		
 		System.out.println("번호 : " + foundArticle.ID);
 		System.out.println("작성날짜 : " + foundArticle.RegDate);
 		System.out.println("수정날짜 : " + foundArticle.UpdateDate);
-		System.out.println("작성자 : " + foundArticle.MemberId);
+		System.out.println("작성자 : " + writerName);
 		System.out.println("제목 : " + foundArticle.Title);
 		System.out.println("내용 : " + foundArticle.Content);
 		System.out.println("조회수 : " + foundArticle.Count);
@@ -241,8 +238,9 @@ public class ArticleController extends Controller {
 	// 테스트 데이터
 	public void makeTestData() {		// static -> public
 		System.out.println("테스트를 위한 게시글 데이터를 생성합니다.");
-		Container.articleDao.add(new Article(1, 3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목1", "내용1", 11));
-		Container.articleDao.add(new Article(2, 2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목2", "내용2", 22));
-		Container.articleDao.add(new Article(3, 2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목3", "내용3", 33));
+		// 1번 김철수, 2번 김영희, 3번 홍길동
+		Container.articleDao.add(new Article(1, 3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목1", "내용1", 11));	// 홍길동
+		Container.articleDao.add(new Article(2, 2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목2", "내용2", 22));	// 김영희
+		Container.articleDao.add(new Article(3, 2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목3", "내용3", 33));	// 김영희
 	}
 }
