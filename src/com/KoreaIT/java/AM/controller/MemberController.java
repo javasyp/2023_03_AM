@@ -1,11 +1,9 @@
 package com.KoreaIT.java.AM.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import com.KoreaIT.java.AM.container.Container;
-import com.KoreaIT.java.AM.dto.Article;
 import com.KoreaIT.java.AM.dto.Member;
 import com.KoreaIT.java.AM.util.Util;
 
@@ -51,6 +49,7 @@ public class MemberController extends Controller {
 
 	private void showProfile() {
 		System.out.println("== 현재 로그인한 회원의 정보 ==");
+		System.out.println("나의 회원번호 : " + loginedMember.ID);
 		System.out.println("로그인 아이디 : " + loginedMember.loginId);
 		System.out.println("이름 : " + loginedMember.name);
 		
@@ -81,11 +80,10 @@ public class MemberController extends Controller {
 		System.out.printf("로그인 성공! %s님 반갑습니다.\n", loginedMember.name);
 		
 	}
-
-	int lastMemberId = 0;
 	
 	private void doJoin() {
-		int id = lastMemberId + 1;
+		int id = Container.memberDao.setNewId();
+		
 		String regDate = Util.getNowDateTimeStr();
 		
 		String joinId = null;		// while문에서 돌아가기 때문에 초기화 해줘야함.
@@ -123,10 +121,10 @@ public class MemberController extends Controller {
 		String joinName = sc.nextLine();
 		
 		Member members = new Member(id, regDate, regDate, joinId, joinPw, joinName);
-		members_board.add(members);
+//		members_board.add(members);
+		Container.memberDao.add(members);
 		
 		System.out.println(id + "번 회원이 가입되었습니다.");
-		lastMemberId++;
 	}
 	
 	// 사용자가 입력한 아이디와 일치하는 회원 있는지 확인
@@ -164,9 +162,9 @@ public class MemberController extends Controller {
 	// 테스트 데이터
 	public void makeTestData() {
 		System.out.println("테스트를 위한 회원 데이터를 생성합니다.");
-		members_board.add(new Member(1, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test1", "test1", "김철수"));
-		members_board.add(new Member(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test2", "test2", "김영희"));
-		members_board.add(new Member(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test3", "test3", "홍길동"));
+		Container.memberDao.add(new Member(1, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test1", "test1", "김철수"));
+		Container.memberDao.add(new Member(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test2", "test2", "김영희"));
+		Container.memberDao.add(new Member(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test3", "test3", "홍길동"));
 	}
 
 }

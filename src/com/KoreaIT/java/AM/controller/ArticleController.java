@@ -47,11 +47,10 @@ public class ArticleController extends Controller {
 		}
 	}
 	
-	int lastArticleId = 3;
-	
 	// 입력
 	public void doWrite() {
-		int id = lastArticleId + 1;
+		// 직접 DB에 넣기 X 현재 DB는 Dao에 있기 때문에(A.L) 컨테이너를 통해 넣는 것
+		int id = Container.articleDao.setNewId();
 
 		System.out.print("제목 : ");
 		String title = sc.nextLine();
@@ -62,11 +61,11 @@ public class ArticleController extends Controller {
 		String regDate = Util.getNowDateTimeStr();
 
 		Article article = new Article(id, loginedMember.ID, regDate, regDate, title, content);
-		articles_board.add(article);
-
+//		articles_board.add(article);	// 직접 DB에 추가
+//		Container.articleDao.articles.add(article);
+		Container.articleDao.add(article);		// 컨테이너를 통해 간접 추가
+		
 		System.out.println(id + "번 글이 생성되었습니다.");
-		lastArticleId++;
-			
 	}
 
 	// 목록
@@ -98,10 +97,6 @@ public class ArticleController extends Controller {
 			}
 		}
 		
-//		String writerName = null;
-//
-//		List<Member> members = Container.memberDao.members;
-		
 		System.out.println("번호 / 제목 / 조회 / 작성자");	// 검색어가 없는 경우
 		
 		for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
@@ -110,7 +105,6 @@ public class ArticleController extends Controller {
 			List<Member> members = Container.memberDao.members;
 			
 			Article articles_list = forPrintArticles.get(i); // 값 읽어와서 변수에 저장
-//			writerName = members.get(articles_list.MemberId-1).name;
 			
 			// 작성자의 이름 출력하기
 			for (Member member : members) {
@@ -247,8 +241,8 @@ public class ArticleController extends Controller {
 	// 테스트 데이터
 	public void makeTestData() {		// static -> public
 		System.out.println("테스트를 위한 게시글 데이터를 생성합니다.");
-		articles_board.add(new Article(1, 3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목1", "내용1", 11));
-		articles_board.add(new Article(2, 2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목2", "내용2", 22));
-		articles_board.add(new Article(3, 2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목3", "내용3", 33));
+		Container.articleDao.add(new Article(1, 3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목1", "내용1", 11));
+		Container.articleDao.add(new Article(2, 2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목2", "내용2", 22));
+		Container.articleDao.add(new Article(3, 2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목3", "내용3", 33));
 	}
 }

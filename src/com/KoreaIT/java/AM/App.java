@@ -73,7 +73,7 @@ public class App {
 				case "member/logout":
 				case "member/profile":
 					if (Controller.isLogined() == false) {
-						System.out.println("로그인 후 이용해주세요");
+						System.out.println("로그인 후 이용해 주세요.");
 						continue;
 					}
 					break;
