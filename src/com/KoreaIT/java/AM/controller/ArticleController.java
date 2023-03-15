@@ -98,15 +98,28 @@ public class ArticleController extends Controller {
 			}
 		}
 		
-		String writerName = null;
-
-		List<Member> members = Container.memberDao.members;
+//		String writerName = null;
+//
+//		List<Member> members = Container.memberDao.members;
 		
 		System.out.println("번호 / 제목 / 조회 / 작성자");	// 검색어가 없는 경우
 		
 		for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
+			String writerName = null;
+
+			List<Member> members = Container.memberDao.members;
 			
 			Article articles_list = forPrintArticles.get(i); // 값 읽어와서 변수에 저장
+//			writerName = members.get(articles_list.MemberId-1).name;
+			
+			// 작성자의 이름 출력하기
+			for (Member member : members) {
+				if (articles_list.MemberId == member.ID) {
+					writerName = member.name;
+					break;
+				}
+			}
+			
 			System.out.println(" " + articles_list.ID + "  / " + articles_list.Title + " / " + articles_list.Count + " / " + writerName);
 		}
 	}
