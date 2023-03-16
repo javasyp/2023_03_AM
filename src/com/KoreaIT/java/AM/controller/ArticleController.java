@@ -8,6 +8,7 @@ import com.KoreaIT.java.AM.container.Container;
 import com.KoreaIT.java.AM.dto.Article;
 import com.KoreaIT.java.AM.dto.Member;
 import com.KoreaIT.java.AM.service.ArticleService;
+import com.KoreaIT.java.AM.service.MemberService;
 import com.KoreaIT.java.AM.util.Util;
 
 public class ArticleController extends Controller {
@@ -17,10 +18,12 @@ public class ArticleController extends Controller {
 	private String command;
 	private String actionMethodName;
 	private ArticleService articleService;
+	private MemberService memberService;
 
 	public ArticleController(Scanner sc) {
 		this.sc = sc;
-		this.articleService = Container.articleService;
+		articleService = Container.articleService;
+		memberService = Container.memberService;
 	}
 	
 	public void doAction(String actionMethodName, String command) {
@@ -88,7 +91,7 @@ public class ArticleController extends Controller {
 		for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
 			String writerName = null;
 
-			List<Member> members = Container.memberDao.members;
+			List<Member> members = memberService.getMembers();
 			
 			Article articles_list = forPrintArticles.get(i); // 값 읽어와서 변수에 저장
 			
@@ -126,7 +129,7 @@ public class ArticleController extends Controller {
 		// 작성자의 이름 출력하기
 		String writerName = null;
 		
-		List<Member> members = Container.memberDao.members;
+		List<Member> members = memberService.getMembers();
 		
 		for (Member member : members) {
 			if (foundArticle.MemberId == member.ID) {
